@@ -1,0 +1,16 @@
+services:
+#    cerad_person.example:
+#        class: Cerad\Bundle\PersonBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+  cerad_person__bill_walker__reader:
+    class: Cerad\Bundle\PersonBundle\Action\Reader\BillWalkerReader
+    
+
+  cerad_person__referee__repository:
+    class: Cerad\Bundle\PersonBundle\Model\RefereeRepository
+    arguments: ['@database_connection']
+    
+  cerad_person__referee__saver_dbal:
+    class: Cerad\Bundle\PersonBundle\Action\Saver\RefereeSaverDBAL
+    arguments: ['@cerad_person__referee__repository']
