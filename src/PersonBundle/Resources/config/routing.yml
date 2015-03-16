@@ -1,3 +1,19 @@
 cerad_person_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: CeradPersonBundle:Default:index }
+  path:     /hello/{name}
+  defaults: { _controller: CeradPersonBundle:Default:index }
+    
+cerad_person__referee__find:
+  path:     /referees/{id}
+  methods:  [GET]
+  defaults: { _controller: CeradPersonBundle:Referee:find }
+  
+cerad_person__referee__update:
+  path:     /referees/{id}
+  methods:  [PUT]
+  defaults: { _controller: CeradPersonBundle:Referee:update }
+  
+cerad_person__referee__find_by:
+  path:     /referees
+  methods:  [GET]
+  defaults: { _controller: CeradPersonBundle:Referee:findBy }
+

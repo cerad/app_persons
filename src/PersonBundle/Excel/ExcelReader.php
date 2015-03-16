@@ -9,6 +9,8 @@ class ExcelReader
     protected $items  = array();
     protected $errors = array();
     
+    protected $recordFirst = null;
+    
     protected $record = array(
         'region' => array('cols' => 'Region', 'req' => true,  'default' => 0, 'plus' => true),
     );
@@ -127,7 +129,20 @@ class ExcelReader
         
         $rows = $ws->toArray();
        
-        $header = array_shift($rows);
+        $headerFlag = false;
+        while(!$headerFlag)
+        {
+          $header = array_shift($rows);
+          
+          if (!$this->recordFirst)
+          {
+            $headerFlag = true;
+          }
+          else
+          {
+            if (trim($header[0]) == $this->recordFirst) $headerFlag = true;
+          }
+        }
         
         $this->processHeaderRow($header);
         

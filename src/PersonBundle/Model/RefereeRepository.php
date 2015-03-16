@@ -95,4 +95,21 @@ EOT;
     
     return $changes;
   }
+  public function findAll()
+  {
+    $sql = "SELECT * FROM referees;";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+  }
+  public function find($id)
+  {
+    $sql = "SELECT * FROM referees WHERE id = :id;";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(['id' => $id]);
+        
+    $referees = $stmt->fetchAll();
+        
+    return (count($referees) == 1) ? $referees[0] : null;
+  }
 }

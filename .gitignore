@@ -11,3 +11,5 @@
 /web/bundles/
 /composer.lock
 /work/
+/nbproject/private/
+/web/bower_components/

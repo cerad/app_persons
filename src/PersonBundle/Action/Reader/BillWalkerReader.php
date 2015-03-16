@@ -5,6 +5,8 @@ use Cerad\Bundle\PersonBundle\Excel\ExcelReader;
 
 class BillWalkerReader extends ExcelReader
 {
+  protected $recordFirst = 'Registration Year';
+  
   protected $record = 
   [
     'ussf_id'        => ['cols' => 'USSF ID'],
@@ -12,7 +14,7 @@ class BillWalkerReader extends ExcelReader
     'reg_year'       => ['cols' => 'Registration Year'],
     'reg_state'      => ['cols' => 'Registered State'],
     'reg_status'     => ['cols' => 'Registration Status'],
-    'district'      => ['cols' => 'District'],
+    'district'       => ['cols' => 'District'],
          
     'name_last'      => ['cols' => 'LNAME'],
     'name_middle'    => ['cols' => 'MNAME'],

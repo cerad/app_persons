@@ -1,0 +1,12 @@
+<div>
+  <ul class="referees">
+    <li ng-repeat="referee in referees">
+      {{ referee.id }} {{ referee.name_first }} {{ referee.name_last }}
+      <a href="#/referees/{{referee.id}}/show">Show</a>
+      <a href="#/referees/{{referee.id}}/update">Update</a>
+    </li>
+    <li>
+        <a href="#/referees/insert">Insert New Referee</a>
+    </li>
+  </ul>
+</div>

@@ -37,6 +37,7 @@ class RefereeSaverDBAL
     {
       $this->results['inserted']++;
       $refereeRepository->insertReferee($referee);
+      return;
     }
   //$referee['name_first'] = 'Art';
   //$referee['name_last' ] = 'Hundiak';
