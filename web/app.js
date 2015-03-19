@@ -1,6 +1,4 @@
-'use strict';
-
-(function() {
+(function(angular) { 'use strict';
 
 var zaysoApp = angular.module('zaysoApp', ['ngResource','ngRoute','zaysoApp.refereeComponent']);
 
@@ -28,4 +26,4 @@ zaysoApp.config(['$routeProvider',
       });
   }]);
   
-})();
+})(angular);

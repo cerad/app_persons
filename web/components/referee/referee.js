@@ -2,6 +2,17 @@
     
 var refereeComponent = angular.module('zaysoApp.refereeComponent', []);
 
+refereeComponent.controller('RefereeTestController', ['$scope', '$http',
+  function($scope, $http) 
+  {
+    $http.get('/app_dev.php/referees').success(function(data)
+    {
+      $scope.students = angular.fromJson(data);
+      console.log($scope.students[0]);
+    });
+  }
+]);
+
 refereeComponent.controller('RefereeListController', ['$scope', 'refereeRepository',
   function($scope, refereeRepository) 
   {
@@ -38,23 +49,25 @@ refereeComponent.controller('RefereeInsertController', ['$scope', 'refereeReposi
 
 var Referee = function(params)
 {
-  this.id         = null;
-  this.name_first = null;
-  this.name_last  = null;
-  this.email_ussf = null;
+  var item = 
+  {
+    id:         null,
+    name_first: null,
+    name_last:  null,
+    email_ussf: null,
   
-  this.nameFull = function()
-  {
-    return this.name_first + ' ' + this.name_last;
+    get name_full() {
+      return this.name_first + ' ' + this.name_last;
+    }
   };
-  if (params)
+  if (!params) return item;
+
+  Object.keys(item).forEach(function(key)
   {
-    var that = this;
-    Object.keys(that).forEach(function(key)
-    {
-      if (params.hasOwnProperty(key)) that[key] = params[key];
-    });
-  }
+    if (params.hasOwnProperty(key)) item[key] = params[key];
+  });
+  
+  return item;
 };
 var RefereeRepository = function(resource)
 {
