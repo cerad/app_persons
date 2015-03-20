@@ -1,31 +1,20 @@
 (function(angular) { 'use strict';
     
-var refereeComponent = angular.module('zaysoApp.refereeComponent', []);
+var refereeModule = angular.module('ceradRefereeModule', []);
 
-refereeComponent.controller('RefereeTestController', ['$scope', '$http',
-  function($scope, $http) 
-  {
-    $http.get('/app_dev.php/referees').success(function(data)
-    {
-      $scope.students = angular.fromJson(data);
-      console.log($scope.students[0]);
-    });
-  }
-]);
-
-refereeComponent.controller('RefereeListController', ['$scope', 'refereeRepository',
+refereeModule.controller('RefereeListController', ['$scope', 'refereeRepository',
   function($scope, refereeRepository) 
   {
     $scope.referees = refereeRepository.findAll();
   }
 ]);
-refereeComponent.controller('RefereeShowController', ['$scope', '$routeParams', 'refereeRepository',
+refereeModule.controller('RefereeShowController', ['$scope', '$routeParams', 'refereeRepository',
   function($scope, $routeParams, refereeRepository) 
   {
     $scope.referee = refereeRepository.find($routeParams.id);
   }
 ]);
-refereeComponent.controller('RefereeUpdateController', ['$scope', '$routeParams', 'refereeRepository',
+refereeModule.controller('RefereeUpdateController', ['$scope', '$routeParams', 'refereeRepository',
   function($scope, $routeParams, refereeRepository) 
   { 
     $scope.referee = refereeRepository.find($routeParams.id);
@@ -35,7 +24,7 @@ refereeComponent.controller('RefereeUpdateController', ['$scope', '$routeParams'
     };
   }
 ]);
-refereeComponent.controller('RefereeInsertController', ['$scope', 'refereeRepository',
+refereeModule.controller('RefereeInsertController', ['$scope', 'refereeRepository',
   function($scope, refereeRepository) 
   {
     // TODO: create()
@@ -101,11 +90,11 @@ var RefereeRepository = function(resource)
     return this.resource.update(item);
   };
 };
-refereeComponent.factory('refereeRepository', ['$resource',
-  function($resource)
+refereeModule.factory('refereeRepository', ['$resource','ceradApiPrefix',
+  function($resource,apiPrefix)
   {
     var resource = 
-      $resource('/app_dev.php/referees/:id', { id: '@id' }, {
+      $resource(apiPrefix + '/referees/:id', { id: '@id' }, {
         update: {method: 'PUT'},
         findAll:  { 
           method: 'GET' , 

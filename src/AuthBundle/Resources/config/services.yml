@@ -8,9 +8,11 @@ services:
       - '@security.http_utils'
       - '%cerad_auth__oauth__redirect%'
       - '%cerad_auth__oauth__providers%'
+      - '%kernel.secret%'
       
   cerad_auth__oauth__controller:
     class: Cerad\Bundle\AuthBundle\OAuth\OAuthController
     arguments:  
       - '@cerad_auth__oauth__provider_manager'
+      - '%kernel.secret%'
 

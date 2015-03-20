@@ -9,8 +9,9 @@ class ProviderManager
     protected $providers;
     protected $httpUtils;
     protected $redirectUriName;
+    protected $secret;
     
-    public function __construct(HttpUtils $httpUtils,$redirectUriName,$providers)
+    public function __construct(HttpUtils $httpUtils,$redirectUriName,$providers,$secret)
     {
         $this->httpUtils       = $httpUtils;
         $this->redirectUriName = $redirectUriName;
@@ -19,10 +20,11 @@ class ProviderManager
             $provider['instance'] = null;
             $this->providers[$provider['name']] = $provider;
         }
+        $this->secret = $secret;
     }
   public function getProviders() { return $this->providers; }
 
-  public function createFromName($name)
+  public function createFromName($name,$state = null)
   {
     if (!isset($this->providers[$name])) {
       throw new \Exception(sprintf("Cerad Oauth Provider not found: %s",$name));
@@ -31,7 +33,7 @@ class ProviderManager
         return $this->providers[$name]['instance']; 
     }
     // The signed state token
-    $state = $name . '.state';
+    if (!$state) $state = \JWT::encode(['name' => $name, 'random' => uniqid()], $this->secret);
     
     // Create it
     $info = $this->providers[$name];
@@ -53,15 +55,11 @@ class ProviderManager
   public function createFromRequest(Request $request)
   {
     // OAuth1 will not have state, how to handle twitter?
-    $requestState = $request->query->get('state');
+    $state = $request->query->get('state');
         
-  //if ($requestState && ($requestState != $storageState)) {
-  //    throw new \Exception("OAuth State Mismatch");
-  //}
+    // Toss exception if tampered with
+    $info = \JWT::decode($state,$this->secret);
         
-    // Name was stored in session
-    $name = explode('.',$requestState)[0];
-        
-    return $this->createFromName($name);
+    return $this->createFromName($info->name,$state);
   }
 }

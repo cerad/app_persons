@@ -1,17 +1,15 @@
 (function(angular) { 'use strict';
 
-var zaysoApp = angular.module('zaysoApp', ['ngResource','ngRoute',
-  'zaysoApp.refereeComponent',
-  'ceradAuthModule'
+var appModule = angular.module('zaysoApp', ['ngResource','ngRoute',
+  'appConfigModule',
+  'ceradAuthModule',
+  'ceradRefereeModule'
 ]);
 
-zaysoApp.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/home', {
-        templateUrl: 'home.html',
-        controller:  'HomeController'
-      }).
+appModule.config(['$routeProvider',function($routeProvider) {
+  $routeProvider.
+    when('/home',  { templateUrl: 'home.html',               controller: 'HomeController'}).
+    when('/login', { templateUrl: 'modules/auth/login.html', controller: 'CeradLoginController'}).
       when('/referees', {
         templateUrl: 'modules/referee/referee-list.html',
         controller:  'RefereeListController'
@@ -36,24 +34,9 @@ zaysoApp.config(['$routeProvider',
         redirectTo: '/home'
       });
   }]);
-  zaysoApp.controller('HomeController', ['$scope','$window',
-  function($scope,$window) 
+appModule.controller('HomeController', ['$scope',
+  function($scope) 
   { 
-    var authWindow;
-    
-    $scope.oauth = function(provider)
-    {
-      var url = '/app_dev.php/oauth/tokens?provider=' + provider;
-      authWindow = $window.open(url,'_blank', 'height=400, width=300, top=100, left=300, modal=yes');
-      authWindow.focus();
-    };
-    $window.oauthCallback = function(oauthInfo) 
-    {
-      authWindow.close();
-      
-      // Now use the oauthToken to get a real token
-      console.log(oauthInfo);
-    };
   }
 ]);  
 })(angular);
