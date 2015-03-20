@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerad\Bundle\AuthBundle\Action;
+namespace Cerad\Bundle\AuthBundle\OAuth;
 
 //  Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

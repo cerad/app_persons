@@ -1,5 +1,6 @@
 cerad_auth:
   oauth:
+    redirect: cerad_auth__oauth__redirect
     providers:
       -
         name:  google

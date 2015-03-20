@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /* =======================================================
  * Addes a twig namespace pointing to the Action directory
+ * No longer needed.
  */
 class Pass implements CompilerPassInterface
 {

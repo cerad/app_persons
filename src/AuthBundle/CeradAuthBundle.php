@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Cerad\Bundle\AuthBundle\DependencyInjection\Extension;
-use Cerad\Bundle\AuthBundle\DependencyInjection\Compiler\Pass;
+//  Cerad\Bundle\AuthBundle\DependencyInjection\Compiler\Pass;
 
 class CeradAuthBundle extends Bundle
 {
@@ -18,6 +18,6 @@ class CeradAuthBundle extends Bundle
   {
     parent::build($container);
 
-    $container->addCompilerPass(new Pass());
+  //$container->addCompilerPass(new Pass());
   }
 }

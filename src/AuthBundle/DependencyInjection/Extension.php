@@ -26,6 +26,7 @@ class Extension extends BaseExtension
         {
             $config = array_merge($config,$configx);
         }
+        $container->setParameter('cerad_auth__oauth__redirect', $config['oauth']['redirect']);
         $container->setParameter('cerad_auth__oauth__providers',$config['oauth']['providers']);
         
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

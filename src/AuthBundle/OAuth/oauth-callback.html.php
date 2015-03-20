@@ -10,10 +10,8 @@
     <tr><td>User Name </td><td><?php echo $userInfo['nickname'    ]; ?></td></tr>
     <tr><td>Real Name </td><td><?php echo $userInfo['realname'    ]; ?></td></tr>
     <tr><td>Email     </td><td><?php echo $userInfo['email'       ]; ?></td></tr>
-    <tr><td>Token     </td><td><?php echo $accessToken;              ?></td></tr>
   </table>
   <script>
-    var token = '<?php echo $accessToken; ?>';
     window.opener.oauthCallback('<?php echo $json; ?>');
   </script>
 </body>
