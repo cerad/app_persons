@@ -1,0 +1,15 @@
+parameters:
+  
+services:
+
+  cerad_auth__oauth__provider_manager:
+    class: Cerad\Bundle\AuthBundle\OAuth\ProviderManager
+    arguments:  
+      - '@security.http_utils'
+      - '%cerad_auth__oauth__providers%'
+      
+  cerad_auth__oauth__controller:
+    class: Cerad\Bundle\AuthBundle\Action\OAuthController
+    arguments:  
+      - '@cerad_auth__oauth__provider_manager'
+

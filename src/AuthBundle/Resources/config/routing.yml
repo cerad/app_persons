@@ -1,0 +1,10 @@
+
+cerad_auth__oauth__redirect:
+    pattern: /oauth/callback
+    defaults:
+        _controller: cerad_auth__oauth__controller:callbackAction
+        
+cerad_auth__oauth__tokens:
+    pattern: /oauth/tokens
+    defaults:
+        _controller: cerad_auth__oauth__controller:tokensAction

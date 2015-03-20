@@ -1,0 +1,28 @@
+cerad_auth:
+  oauth:
+    providers:
+      -
+        name:  google
+        class: Cerad\Bundle\AuthBundle\OAuth\Provider\GoogleProvider
+        client_id:     %google_client_id%
+        client_secret: %google_client_secret%
+      -
+        name: facebook
+        class: Cerad\Bundle\AuthBundle\OAuth\Provider\FacebookProvider
+        client_id:     %facebook_client_id%
+        client_secret: %facebook_client_secret%
+      -
+        name: github
+        class: Cerad\Bundle\AuthBundle\OAuth\Provider\GithubProvider
+        client_id:     %github_client_id%
+        client_secret: %github_client_secret%
+      -
+        name: linkedin
+        class: Cerad\Bundle\AuthBundle\OAuth\Provider\LinkedinProvider
+        client_id:     %linkedin_client_id%
+        client_secret: %linkedin_client_secret%
+      -
+        name: twitter
+        class: Cerad\Bundle\AuthBundle\OAuth\Provider\TwitterProvider
+        client_id:     %twitter_client_id%
+        client_secret: %twitter_client_secret%

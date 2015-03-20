@@ -7,7 +7,7 @@ authModule.controller('CeradOAuthTokenController',
   function($scope, $routeParams) 
   {
     $scope.provider = $routeParams.provider;
-    $scope.providerUrl = '/' + $scope.provider + '.html';
+    $scope.providerUrl = '/app_dev.php/oauth/tokens?provider=' + $scope.provider;
   }
 ]);
 

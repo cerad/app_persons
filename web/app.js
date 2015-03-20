@@ -36,9 +36,24 @@ zaysoApp.config(['$routeProvider',
         redirectTo: '/home'
       });
   }]);
-  zaysoApp.controller('HomeController', ['$scope',
-  function($scope) 
+  zaysoApp.controller('HomeController', ['$scope','$window',
+  function($scope,$window) 
   { 
+    var authWindow;
+    
+    $scope.oauth = function(provider)
+    {
+      var url = '/app_dev.php/oauth/tokens?provider=' + provider;
+      authWindow = $window.open(url,'_blank', 'height=400, width=300, top=100, left=300, modal=yes');
+      authWindow.focus();
+    };
+    $window.oauthCallback = function(oauthInfo) 
+    {
+      authWindow.close();
+      
+      // Now use the oauthToken to get a real token
+      console.log(oauthInfo);
+    };
   }
 ]);  
 })(angular);

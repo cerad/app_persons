@@ -16,6 +16,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new AppBundle\AppBundle(),
+            new Cerad\Bundle\AuthBundle\CeradAuthBundle(),
             new Cerad\Bundle\PersonBundle\CeradPersonBundle(),
         );
 
