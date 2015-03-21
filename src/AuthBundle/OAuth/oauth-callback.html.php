@@ -12,7 +12,7 @@
     <tr><td>Email     </td><td><?php echo $userInfo['email'       ]; ?></td></tr>
   </table>
   <script>
-    window.opener.oauthCallback('<?php echo $json; ?>');
+    window.opener.oauthCallback('<?php echo $oauthToken; ?>');
   </script>
 </body>
 </html>

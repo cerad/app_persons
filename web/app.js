@@ -1,6 +1,6 @@
 (function(angular) { 'use strict';
 
-var appModule = angular.module('zaysoApp', ['ngResource','ngRoute',
+var appModule = angular.module('zaysoApp', ['ngResource','ngRoute','ngStorage',
   'appConfigModule',
   'ceradAuthModule',
   'ceradRefereeModule'

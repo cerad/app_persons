@@ -8,3 +8,9 @@ cerad_auth__oauth__tokens:
     pattern: /oauth/tokens
     defaults:
         _controller: cerad_auth__oauth__controller:tokensAction
+        
+cerad_auth__auth__tokens:
+    pattern: /auth/tokens
+   #method: [POST]
+    defaults:
+        _controller: cerad_auth__auth__controller:tokensPostAction

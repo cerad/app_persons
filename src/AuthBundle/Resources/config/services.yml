@@ -15,4 +15,9 @@ services:
     arguments:  
       - '@cerad_auth__oauth__provider_manager'
       - '%kernel.secret%'
+      
+  cerad_auth__auth__controller:
+    class: Cerad\Bundle\AuthBundle\Auth\AuthController
+    arguments:  
+      - '%kernel.secret%'
 

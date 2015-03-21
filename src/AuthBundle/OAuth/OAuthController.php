@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class OAuthController
 {
+  private $secret;
   private $providerManager;
   
-  public function __construct($providerManager)
+  public function __construct($providerManager,$secret)
   {
+    $this->secret = $secret;
     $this->providerManager = $providerManager;
   }
   public function callbackAction(Request $request)
@@ -22,13 +24,9 @@ class OAuthController
 
     $accessTokenData = $provider->getAccessToken($request);
         
-    $accessToken = $accessTokenData['access_token'];
-        
     $userInfo = $provider->getUserInfo($accessTokenData);
     
-    $encodingOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
-    
-    $json = json_encode($userInfo);
+    $oauthToken = \JWT::encode($userInfo, $this->secret);
     
     $html = include dirname(__FILE__) . '/oauth-callback.html.php';
     

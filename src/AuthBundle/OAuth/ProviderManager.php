@@ -33,8 +33,10 @@ class ProviderManager
         return $this->providers[$name]['instance']; 
     }
     // The signed state token
-    if (!$state) $state = \JWT::encode(['name' => $name, 'random' => uniqid()], $this->secret);
-    
+    if (!$state) 
+    {
+      $state = \JWT::encode(['name' => $name, 'random' => uniqid()], $this->secret);
+    }
     // Create it
     $info = $this->providers[$name];
     $class = $info['class'];
