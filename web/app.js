@@ -31,6 +31,9 @@ appModule.config(['$routeProvider',function($routeProvider) {
       controller:  'CeradOAuthTokenController'}).
     otherwise({ redirectTo: '/home'});
   }]);
+appModule.config(['$httpProvider', function ($httpProvider) {
+  $httpProvider.interceptors.push('ceradAuthInterceptor');
+}]);
 appModule.controller('HomeController', ['$scope',
   function($scope) 
   { 

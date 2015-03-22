@@ -28,6 +28,7 @@ class Extension extends BaseExtension
         }
         $container->setParameter('cerad_auth__oauth__redirect', $config['oauth']['redirect']);
         $container->setParameter('cerad_auth__oauth__providers',$config['oauth']['providers']);
+        $container->setParameter('cerad_auth__auth__users',     $config['users']);
         
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

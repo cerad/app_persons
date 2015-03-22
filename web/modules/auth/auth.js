@@ -2,6 +2,25 @@
     
 var authModule = angular.module('ceradAuthModule', []);
 
+authModule.factory('ceradAuthInterceptor', ['$q', 'ceradAuthManager', function ($q, authManager) {
+  return {
+    request: function (config) {
+      config.headers = config.headers || {};
+      if (authManager.authToken) {
+        // Was prefixed with 'Bearer '
+        config.headers.Authorization = '' + authManager.authToken;
+      }
+      return config;
+    },
+    response: function (response) {
+      if (response.status === 401) {
+        // handle the case where the user is not authenticated
+        alert('401 response ');
+      }
+      return response || $q.when(response);  //???
+    }
+  };
+}]);
 authModule.controller('CeradOAuthTokenController',
   ['$scope', '$routeParams', 'cerapApiPrefix',
   function($scope, $routeParams, apiPrefix) 
@@ -27,7 +46,7 @@ authModule.controller('CeradLoginController',
       oauthWindow.close();
       
       // Now use the oauthToken to get a real token
-      console.log(oauthToken);
+      console.log('Callback ' . oauthToken);
       authManager.oauthToken = oauthToken;
     };
     $scope.oauthSubmit = function()
@@ -41,7 +60,7 @@ authModule.controller('CeradLoginController',
       .success(function(data)
       {
         var userData = angular.fromJson(data);
-        console.log('User  '     + userData.email);
+        console.log('User  '     + userData.username);
         console.log('Roles '     + userData.roles);
         console.log('AuthToken ' + userData.authToken);
         
@@ -51,7 +70,6 @@ authModule.controller('CeradLoginController',
         
         authManager.authUser = userData;
         
-        // Any reason to delete OAuth token?
       });
       // Handle unauthenticated stuff
     }

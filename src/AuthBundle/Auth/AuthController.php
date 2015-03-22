@@ -7,43 +7,46 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AuthController
 {
+  private $users;
   private $secret;
   
-  public function __construct($secret)
+  public function __construct($secret,$users)
   {
+    $this->users  = $users;
     $this->secret = $secret;
-  }
-  public function callbackAction(Request $request)
-  {
-    $provider = $this->providerManager->createFromRequest($request);
-
-    $accessTokenData = $provider->getAccessToken($request);
-        
-    $userInfo = $provider->getUserInfo($accessTokenData);
-    
-    $oauthToken = \JWT::encode($userInfo, $this->secret);
-    
-    $html = include dirname(__FILE__) . '/oauth-callback.html.php';
-    
-    return new Response($html);
   }
   public function tokensPostAction(Request $request)
   {
     $requestData = json_decode($request->getContent(),true);
+    
     $oauthToken = $requestData['oauthToken'];
-    $payload = \JWT::decode($oauthToken, $this->secret);
     
-    $responseData = [
-      'iat' => time(),
-      'userId' => 1, 
-      'email'  => $payload->email,
-      'roles'  => ['ROLE_USER','ROLE_SRA']
-    ];
-    $authToken = \JWT::encode($responseData, $this->secret);
+    $oauthPayload = (array)\JWT::decode($oauthToken, $this->secret);
     
-    $responseData['authToken'] = $authToken;
+    // Maybe user provider here?
+    $identifier = $oauthPayload['identifier'];
+    $userInfo = [];
+    foreach($this->users as $username => $info)
+    {
+      if ($info['identifier'] == $identifier)
+      {
+        $userInfo = array_merge(['username' => $username], $info);
+        break;
+      }
+    }
+    $authPayload = array_merge(
+      [
+        'iat' => time(),
+        'username' => 'Unknown',
+        'roles' => [],
+      ],
+      $userInfo
+    );
+    $authToken = \JWT::encode($authPayload, $this->secret);
     
-    return new JsonResponse($responseData,202);
+    $authPayload['authToken'] = $authToken;
+    
+    return new JsonResponse($authPayload,202);
     
   }
 }

@@ -27,3 +27,13 @@ cerad_auth:
         class: Cerad\Bundle\AuthBundle\OAuth\Provider\TwitterProvider
         client_id:     %twitter_client_id%
         client_secret: %twitter_client_secret%
+        
+  users:
+    ahundiak:
+      provider:   google
+      identifier: 110360268001715642098
+      name:       Art Hundiak
+      roles:      ['ROLE_SRA' ]
+    nasoa:    { identifier: pass1, roles: [ 'ROLE_USER' ] }
+    sra:      { identifier: pass2, roles: [ 'ROLE_SRA'  ] }
+    assignor: { identifier: pass2, roles: [ 'ROLE_ASSIGNOR' ] }

@@ -19,5 +19,17 @@ services:
   cerad_auth__auth__controller:
     class: Cerad\Bundle\AuthBundle\Auth\AuthController
     arguments:  
+    - '%kernel.secret%'
+    - '%cerad_auth__auth__users%'
+
+  cerad_auth__auth__user_provider:
+    class: Cerad\Bundle\AuthBundle\Auth\AuthUserProvider
+    arguments:  
+      - '%cerad_auth__auth__users%'
+      
+  cerad_auth__auth__authenticator:
+    class: Cerad\Bundle\AuthBundle\Auth\AuthAuthenticator
+    arguments:
       - '%kernel.secret%'
+  
 
