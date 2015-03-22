@@ -10,6 +10,19 @@
   <link rel="stylesheet" type="text/css" href="/app.css">
 </head>
 <body>
+  <div ng-controller="CeradUserInfoController">
+    <div ng-show="user">
+      <p>
+        {{user.username}}
+        <button ng-click="logout()">Log Out</button>
+      </p>
+    </div>
+    <div ng-hide="user">
+      <p>
+        <button ng-click="login()">Log In</button>
+      </p>
+    </div>
+  </div>
 <div ng-view></div>
 <script src="/vendor/angular/angular.min.js"></script>
 <script src="/vendor/angular-route/angular-route.min.js"></script>

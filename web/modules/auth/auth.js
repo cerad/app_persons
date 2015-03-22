@@ -2,6 +2,13 @@
     
 var authModule = angular.module('ceradAuthModule', []);
 
+authModule.config(['$routeProvider',function($routeProvider) {
+  $routeProvider.
+    when('/login', { 
+      templateUrl: 'modules/auth/login.html', 
+      controller:  'CeradLoginController'});
+}]);
+
 authModule.factory('ceradAuthInterceptor', ['$q', 'ceradAuthManager', function ($q, authManager) {
   return {
     request: function (config) {
@@ -21,17 +28,13 @@ authModule.factory('ceradAuthInterceptor', ['$q', 'ceradAuthManager', function (
     }
   };
 }]);
-authModule.controller('CeradOAuthTokenController',
-  ['$scope', '$routeParams', 'cerapApiPrefix',
-  function($scope, $routeParams, apiPrefix) 
-  {
-    $scope.provider = $routeParams.provider;
-    $scope.providerUrl = apiPrefix + 'oauth/tokens?provider=' + $scope.provider;
-  }
-]);
+
+/* ========================
+ * How much of this can be moved to the authManager?
+ */
 authModule.controller('CeradLoginController', 
-  ['$scope','$window','$http','$sessionStorage','ceradApiPrefix','ceradAuthManager',
-  function($scope,$window,$http,$sessionStorage,apiPrefix,authManager) 
+  ['$scope','$window','$http','ceradApiPrefix','ceradAuthManager',
+  function($scope,$window,$http,apiPrefix,authManager) 
   { 
     var oauthWindow;
     
@@ -44,15 +47,14 @@ authModule.controller('CeradLoginController',
     $window.oauthCallback = function(oauthToken) 
     {
       oauthWindow.close();
-      
-      // Now use the oauthToken to get a real token
-      console.log('Callback ' . oauthToken);
+      oauthWindow = null;
       authManager.oauthToken = oauthToken;
+      
+      $scope.oauthSubmit();
     };
     $scope.oauthSubmit = function()
     {
       var oauthToken = authManager.oauthToken;
-      console.log('OAuthToken ' + oauthToken);
       
       var url = apiPrefix + '/auth/tokens';
       
@@ -62,7 +64,7 @@ authModule.controller('CeradLoginController',
         var userData = angular.fromJson(data);
         console.log('User  '     + userData.username);
         console.log('Roles '     + userData.roles);
-        console.log('AuthToken ' + userData.authToken);
+      //console.log('AuthToken ' + userData.authToken);
         
         authManager.authToken = userData.authToken;
         
@@ -75,33 +77,58 @@ authModule.controller('CeradLoginController',
     }
   }
 ]);
-// Want to be able to configure this for different storage
-authModule.factory('ceradAuthManager',['$sessionStorage',
-  function(storage)
+authModule.controller('CeradUserInfoController', 
+['$scope','$location','ceradAuthManager',
+function($scope,$location,authManager) 
+{ 
+  $scope.user = authManager.authUser;
+  
+  $scope.logout = function()
   {
-    var userLocal;
-    
-    var manager = 
+    authManager.logout(); // Tell server?
+  };
+  $scope.login = function()
+  {
+    $location.url('/login');
+  };
+  $scope.$on('userChanged',function()
+  {
+    $scope.user = authManager.authUser;
+  });
+}]);
+
+// Want to be able to configure this for different storage
+/* So far there is nothing to actually manage
+ * This is actualy an authStorage service
+ */
+authModule.factory('ceradAuthManager',['$rootScope','$sessionStorage',
+function($rootScope,storage)
+{
+  var manager = 
+  {
+    set oauthToken(token) { storage.oauthToken = token; },
+    get oauthToken() { return storage.oauthToken; },
+      
+    set authToken(token) { storage.authToken = token; },
+    get authToken() { return storage.authToken; },
+      
+    set authUser(user) 
+    { 
+      storage.authUser = user;
+      $rootScope.$broadcast('userChanged');
+    },
+    get authUser() { return storage.authUser; },
+      
+    logout: function()
     {
-      set oauthToken(token) { storage.oauthToken = token; },
-      get oauthToken() { return storage.oauthToken; },
-      
-      set authToken(token) { storage.authToken = token; },
-      get authToken() { return storage.authToken; },
-      
-      // Maybe should keep a local copy?
-      set authUser(user) { storage.authUser = user; },
-      get authUser() { return storage.authUser; },
-      
-      reset: function()
-      {
-        delete storage.oauthToken;
-        delete storage.authToken;
-        delete storage.authUser;
-      }
-    };
-    return manager;
-  }]);
+      delete storage.oauthToken;
+      delete storage.authToken;
+      delete storage.authUser;
+      $rootScope.$broadcast('userChanged');
+    }
+  };
+  return manager;
+}]);
 })(angular);
 
 

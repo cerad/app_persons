@@ -2,6 +2,22 @@
     
 var refereeModule = angular.module('ceradRefereeModule', []);
 
+refereeModule.config(['$routeProvider',function($routeProvider) {
+  $routeProvider.
+    when('/referees', { 
+      templateUrl: 'modules/referee/referee-list.html',
+      controller:  'RefereeListController'}).
+    when('/referees/:id/show', {
+      templateUrl: 'modules/referee/referee-show.html',
+      controller:  'RefereeShowController'}).
+    when('/referees/:id/update', {
+      templateUrl: 'modules/referee/referee-update.html',
+      controller:  'RefereeUpdateController'}).
+    when('/referees/insert', {
+      templateUrl: 'modules/referee/referee-insert.html',
+      controller:  'RefereeInsertController'});
+}]);
+
 refereeModule.controller('RefereeListController', ['$scope', 'refereeRepository',
   function($scope, refereeRepository) 
   {
