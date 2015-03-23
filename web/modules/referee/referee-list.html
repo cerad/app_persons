@@ -1,6 +1,7 @@
+<div><a href="#/home">Home</a>
 <div>
   <ul class="referees">
-    <li ng-repeat="referee in referees">
+    <li ng-repeat="referee in refereeList.referees">
       {{ referee.id }} {{ referee.name_first }} {{ referee.name_last }} X {{ referee.name_full }} X
       <a href="#/referees/{{referee.id}}/show">Show</a>
       <a href="#/referees/{{referee.id}}/update">Update</a>

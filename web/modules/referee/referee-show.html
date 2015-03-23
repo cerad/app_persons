@@ -1,4 +1,7 @@
-<div>
-  {{ referee.id }} {{ referee.name_first }} {{ referee.name_last }} X {{ referee.name_full }} X
+<div ng-init="referee = refereeShow.referee">
+  {{ referee.id }} 
+  {{ referee.name_first }} 
+  {{ referee.name_last }} 
+  X {{ referee.name_full }} X {{ referee.type }} 
       <a href="#/referees">Back to List</a>
 </div>

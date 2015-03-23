@@ -6,37 +6,95 @@ refereeModule.config(['$routeProvider',function($routeProvider) {
   $routeProvider.
     when('/referees', { 
       templateUrl: 'modules/referee/referee-list.html',
-      controller:  'RefereeListController'}).
+      controller:  'RefereeListController as refereeList'}).
     when('/referees/:id/show', {
       templateUrl: 'modules/referee/referee-show.html',
-      controller:  'RefereeShowController'}).
+      controller:  'RefereeShowController as refereeShow'}).
     when('/referees/:id/update', {
       templateUrl: 'modules/referee/referee-update.html',
-      controller:  'RefereeUpdateController'}).
+      controller:  'RefereeUpdateController as refereeUpdate'}).
     when('/referees/insert', {
       templateUrl: 'modules/referee/referee-insert.html',
       controller:  'RefereeInsertController'});
 }]);
 
-refereeModule.controller('RefereeListController', ['$scope', 'refereeRepository',
-  function($scope, refereeRepository) 
+refereeModule.controller('RefereeListController', ['$http','refereeRepository',
+  function($http, refereeRepository) 
   {
-    $scope.referees = refereeRepository.findAll();
-  }
-]);
-refereeModule.controller('RefereeShowController', ['$scope', '$routeParams', 'refereeRepository',
-  function($scope, $routeParams, refereeRepository) 
-  {
-    $scope.referee = refereeRepository.find($routeParams.id);
-  }
-]);
-refereeModule.controller('RefereeUpdateController', ['$scope', '$routeParams', 'refereeRepository',
-  function($scope, $routeParams, refereeRepository) 
-  { 
-    $scope.referee = refereeRepository.find($routeParams.id);
+    var vm = this;
+  //vm.referees = refereeRepository.findAll();
+  //vm.referees = findAll();
     
-    $scope.update = function() {
-      refereeRepository.update($scope.referee);
+    var findAll = function()
+    {
+      var items = [];
+      
+      $http.get('/app_dev.php/referees').then(function(response)
+      {
+        response.data.forEach(function(item)
+        {
+          items.push(new Referee(item));
+        });
+      //return items;
+      });
+      return items; //items; // promise
+    };
+    var findAll2 = function()
+    {
+      var referees = [];
+      
+      var req = 
+      {
+        method: 'GET',
+        url: '/app_dev.php/referees',
+        transformResponse: function(data)
+        {
+          var items = angular.fromJson(data);
+          console.log(items[0]);
+          
+          items.forEach(function(item) 
+          {
+            var referee = new Referee(item);
+          //console.log('Referee ' + itemx.name_full);
+            referees.push(referee);
+          });
+          return referees;
+        }
+      };
+      $http(req).then(function(response)
+      {
+        console.log('Referee ' + response.data[4].name_full);
+      //referees = response.data;
+      });
+      return referees; //items; // promise
+    };
+    vm.referees = findAll2();
+    /*
+    findAll().then(function(items)
+    {
+      vm.referees = items;
+    });*/
+  }
+]);
+refereeModule.controller('RefereeShowController', 
+  ['$routeParams', 'refereeRepository',
+  function($routeParams, refereeRepository) 
+  {
+    var vm = this;
+    
+    vm.referee = refereeRepository.find($routeParams.id);
+  }
+]);
+refereeModule.controller('RefereeUpdateController', 
+  ['$routeParams', 'refereeRepository',
+  function($routeParams, refereeRepository) 
+  { 
+    var vm = this;
+    
+    vm.referee = refereeRepository.find($routeParams.id);
+    
+    vm.update = function() {
+      refereeRepository.update(vm.referee);
     };
   }
 ]);
@@ -51,29 +109,57 @@ refereeModule.controller('RefereeInsertController', ['$scope', 'refereeRepositor
     };
   }
 ]);
-
 var Referee = function(params)
 {
-  var item = 
-  {
-    id:         null,
-    name_first: null,
-    name_last:  null,
-    email_ussf: null,
+  this.id         = null;
+  this.name_first = null;
+  this.name_last  = null;
+  this.email_ussf = null;
   
-    get name_full() {
-      return this.name_first + ' ' + this.name_last;
-    }
-  };
-  if (!params) return item;
+Object.defineProperty(this, 'name_fullx', 
+{
+  enumerable: false,
+  get: function() 
+  {
+    return this.name_first + '###' + this.name_last;
+  },
+  set: function(name) 
+  {
+    var words = name.split(' ');
+    this.name_first = words[0] || '';
+    this.name_last  = words[1] || '';
+  }
+});
 
-  Object.keys(item).forEach(function(key)
-  {
-    if (params.hasOwnProperty(key)) item[key] = params[key];
-  });
+  if (!params) return;
   
-  return item;
+  var thisObj = this;
+  
+  Object.keys(this).forEach(function(key)
+  {
+    if (params.hasOwnProperty(key)) 
+    {
+      thisObj[key] = params[key];
+    }
+  });
 };
+// This need to here so we don't try readding the methods over and over
+Object.defineProperty(Referee.prototype, 'name_full', 
+{
+  enumerable: false,
+  get: function() 
+  {
+    return this.name_first + '##' + this.name_last;
+  },
+  set: function(name) 
+  {
+    var words = name.split(' ');
+    this.name_first = words[0] || '';
+    this.name_last  = words[1] || '';
+  }
+});
+Object.defineProperty(Referee.prototype, 'type', { value: 'Referee'});
+
 var RefereeRepository = function(resource)
 {
   this.items    = [];
@@ -121,6 +207,7 @@ refereeModule.factory('refereeRepository', ['$resource','ceradApiPrefix',
             var referees = [];
             items.forEach(function(item) {
               var referee = new Referee(item);
+            //console.log('Referee ' + referee.name_full);
               referees.push(referee);
             });
             return referees;
@@ -131,7 +218,9 @@ refereeModule.factory('refereeRepository', ['$resource','ceradApiPrefix',
           transformResponse: function(data)
           {
             var item = angular.fromJson(data);
-            return new Referee(item);
+            var referee = new Referee(item);
+          //console.log('Referee ' + referee.name_full + ' ' + referee.type);
+            return referee;
           }
         }
     });
