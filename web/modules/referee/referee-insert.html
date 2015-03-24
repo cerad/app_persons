@@ -1,9 +1,8 @@
-<div ng-submit="insert()">
+<div ng-submit="refereeInsert.insert()">
   <form name="form" class="css-form" novalidate>
-    {{ referee.id }}
-    Name:
-    <input type="text" ng-model="referee.name" name="name" required >
-    <input type="submit" value="Save" />
+    <label>First Name:</label><input type="text" ng-model="refereeInsert.referee.name_first" name="name_first" required ><br>
+    <label>Last  Name:</label><input type="text" ng-model="refereeInsert.referee.name_last"  name="name_last"  required ><br>
+    <input type="submit" value="Create" />
   </form>
   <a href="#/referees">Back to List</a>
 </div>

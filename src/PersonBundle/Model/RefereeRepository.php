@@ -37,6 +37,10 @@ EOT;
   }
   public function insertReferee($referee)
   {
+    $referee = array_merge($this->createReferee(),$referee);
+    
+    if (isset($referee['id'])) unset($referee['id']);
+    
     $stmt = $this->prepareInsertReferee();
     $stmt->execute($referee);
     return $this->db->lastInsertId();
@@ -111,5 +115,32 @@ EOT;
     $referees = $stmt->fetchAll();
         
     return (count($referees) == 1) ? $referees[0] : null;
+  }
+  // Maybe pull from database?
+  public function createReferee()
+  {
+    return 
+    [
+      'ussf_id'     => null,  
+      'name_first'  => null, 
+      'name_last'   => null, 
+      'name_middle' => null, 
+      'email_ussf'  => null, 
+      'phone_home'  => null, 
+      'phone_work'  => null, 
+      'gender'      => null, 
+      'dob'         => null,
+      'address_street' => null, 
+      'address_city'    => null, 
+      'address_state'   => null, 
+      'address_zipcode' => null,
+      'reg_year'   => null, 
+      'reg_state'  => null, 
+      'reg_status' => null, 
+      'district'   => null,
+      'new_grade_attained_date' => null, 
+      'ref_first_date' => null, 
+      'state_approved_date' => null
+    ];
   }
 }

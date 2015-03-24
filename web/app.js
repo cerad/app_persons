@@ -3,7 +3,7 @@
 var appModule = angular.module('zaysoApp', ['ngResource','ngRoute','ngStorage',
   'appConfigModule',
   'ceradAuthModule',
-  'ceradRefereeModule'
+  'CeradRefereeModule'
 ]);
 
 appModule.config(['$routeProvider',function($routeProvider) {

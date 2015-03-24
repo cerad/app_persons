@@ -1,7 +1,7 @@
-<div ng-submit="refereeUpdate.update()" ng-init="referee = refereeUpdate.referee">
+<div ng-submit="refereeUpdate.update()">
   <form name="form" class="css-form" novalidate>
-    <label>First Name:</label><input type="text" ng-model="referee.name_first" name="name_first" required ><br>
-    <label>Last  Name:</label><input type="text" ng-model="referee.name_last"  name="name_last"  required ><br>
+    <label>First Name:</label><input type="text" ng-model="refereeUpdate.referee.name_first" name="name_first" required ><br>
+    <label>Last  Name:</label><input type="text" ng-model="refereeUpdate.referee.name_last"  name="name_last"  required ><br>
     <input type="submit" value="Save" />
   </form>
   <a href="#/referees">Back to List</a>

@@ -51,7 +51,7 @@ class RefereeController extends Controller
     {
         $referee1 = json_decode($request->getContent(),true);
         
-        $referee2 = $this->refereeRepository->insert($referee1);
+        $referee2 = $this->refereeRepository->insertReferee($referee1);
         
         return new JsonResponse($referee2);
     }

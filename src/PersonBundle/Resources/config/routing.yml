@@ -12,6 +12,11 @@ cerad_person__referee__update:
   methods:  [PUT]
   defaults: { _controller: CeradPersonBundle:Referee:update }
   
+cerad_person__referee__insert:
+  path:     /referees
+  methods:  [POST]
+  defaults: { _controller: CeradPersonBundle:Referee:insert }
+  
 cerad_person__referee__find_by:
   path:     /referees
   methods:  [GET]
