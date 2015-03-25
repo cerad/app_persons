@@ -8,9 +8,9 @@
 /bin/
 /composer.phar
 /vendor/
-/web/bundles/
 /composer.lock
 /work/
 /nbproject/private/
-/web/bower_components/
+/web/bundles/
 /web/vendor/
+/web/app-config.js
