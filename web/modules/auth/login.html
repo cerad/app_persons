@@ -1,10 +1,18 @@
 <div>
   <ul>
-    <li><button ng-click="oauthConnect('google')  ">Google</button></li>
-    <li><button ng-click="oauthConnect('facebook')">Facebook</button></li>
+    <li><button ng-click="login.oauthConnect('google')  ">Google</button></li>
+    <li><button ng-click="login.oauthConnect('facebook')">Facebook</button></li>
     
     <li><a href="#/home">Home</a></li>
     
-    <li><button ng-click="oauthSubmit()">Submit Token</button></li>
+    <li><button ng-click="login.oauthSubmit()">Submit Token</button></li>
   </ul>
+  <hr>
+  <form novalidate class="simple-form">
+    User Name: <input type="text"     name="username" ng-model="login.userLoginInfo.username" /><br />
+    Password:  <input type="password" name="password" ng-model="login.userLoginInfo.password" /><br />
+    Remember Me: <input type="checkbox" ng-model="login.userLoginInfo.rememberMe" /><br />
+    <input type="submit" ng-click="login.loginSubmit()" value="Login" />
+  </form>
+ 
 </div>

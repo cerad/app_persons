@@ -10,16 +10,16 @@
   <link rel="stylesheet" type="text/css" href="/app.css">
 </head>
 <body>
-  <div ng-controller="CeradUserInfoController">
-    <div ng-show="user">
+  <div ng-controller="CeradUserInfoController as userInfo">
+    <div ng-show="userInfo.user">
       <p>
-        {{user.username}}
-        <button ng-click="logout()">Log Out</button>
+        {{userInfo.user.username}} {{ userInfo.user.person_name }}
+        <button ng-click="userInfo.logout()">Log Out</button>
       </p>
     </div>
-    <div ng-hide="user">
+    <div ng-hide="userInfo.user">
       <p>
-        <button ng-click="login()">Log In</button>
+        <button ng-click="userInfo.login()">Log In</button>
       </p>
     </div>
   </div>

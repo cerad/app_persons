@@ -6,7 +6,7 @@ authModule.config(['$routeProvider',function($routeProvider) {
   $routeProvider.
     when('/login', { 
       templateUrl: 'modules/auth/login.html', 
-      controller:  'CeradLoginController'});
+      controller:  'CeradLoginController as login'});
 }]);
 
 authModule.factory('ceradAuthInterceptor', ['$q', 'ceradAuthManager', function ($q, authManager) {
@@ -33,12 +33,14 @@ authModule.factory('ceradAuthInterceptor', ['$q', 'ceradAuthManager', function (
  * How much of this can be moved to the authManager?
  */
 authModule.controller('CeradLoginController', 
-  ['$scope','$window','$http','ceradApiPrefix','ceradAuthManager',
-  function($scope,$window,$http,apiPrefix,authManager) 
+  ['$scope','$window','$http','$location','ceradApiPrefix','ceradAuthManager',
+  function($scope,$window,$http,$location,apiPrefix,authManager) 
   { 
+    var self = this;
+    
     var oauthWindow;
     
-    $scope.oauthConnect = function(provider)
+    self.oauthConnect = function(provider)
     {
       var url = apiPrefix + '/oauth/tokens?provider=' + provider;
       oauthWindow = $window.open(url,'_blank', 'height=600, width=600, top=100, left=300, modal=yes');
@@ -50,50 +52,71 @@ authModule.controller('CeradLoginController',
       oauthWindow = null;
       authManager.oauthToken = oauthToken;
       
-      $scope.oauthSubmit();
+      self.oauthSubmit();
     };
-    $scope.oauthSubmit = function()
+    self.oauthSubmit = function()
     {
       var oauthToken = authManager.oauthToken;
       
       var url = apiPrefix + '/auth/tokens';
+      var payload = { oauth_token: oauthToken };
       
-      $http.post(url,{ oauthToken: oauthToken })
-      .success(function(data)
-      {
-        var userData = angular.fromJson(data);
-        console.log('User  '     + userData.username);
-        console.log('Roles '     + userData.roles);
-      //console.log('AuthToken ' + userData.authToken);
-        
-        authManager.authToken = userData.authToken;
-        
-        delete userData.authToken;
-        
-        authManager.authUser = userData;
-        
-      });
+      $http.post(url,payload).success(authTokenSuccess);
+
       // Handle unauthenticated stuff
-    }
+    };
+    // Form login
+    self.userLoginInfo = authManager.userLoginInfo;
+    
+    self.loginSubmit = function()
+    {
+      var url = apiPrefix + '/auth/tokens';
+      
+      var payload = 
+      { username: self.userLoginInfo.username, 
+        password: self.userLoginInfo.password };
+      
+      $http.post(url,payload).success(authTokenSuccess);
+    };
+    var authTokenSuccess = function(data)
+    {
+      var userData = angular.fromJson(data);
+      console.log('User  ' + userData.username);
+      console.log('Roles ' + userData.roles);
+      console.log('Token ' + userData.auth_token);
+        
+      authManager.authToken = userData.auth_token;
+        
+      delete userData.auth_token;
+        
+      authManager.authUser = userData;
+      
+      if (self.userLoginInfo.rememberMe) authManager.userLoginInfo = self.userLoginInfo;
+      else                               authManager.userLoginInfo = null;
+      
+      $location.url('/home');
+    };
   }
 ]);
 authModule.controller('CeradUserInfoController', 
 ['$scope','$location','ceradAuthManager',
 function($scope,$location,authManager) 
 { 
-  $scope.user = authManager.authUser;
+  var self = this;
   
-  $scope.logout = function()
+  self.user = authManager.authUser;
+  
+  self.logout = function()
   {
     authManager.logout(); // Tell server?
   };
-  $scope.login = function()
+  self.login = function()
   {
     $location.url('/login');
   };
-  $scope.$on('userChanged',function()
+  $scope.$on('userChanged',function() // Destroy?
   {
-    $scope.user = authManager.authUser;
+    self.user = authManager.authUser;
   });
 }]);
 
@@ -118,14 +141,25 @@ function($rootScope,storage)
       $rootScope.$broadcast('userChanged');
     },
     get authUser() { return storage.authUser; },
-      
+    
+    set userLoginInfo(info) 
+    { 
+      storage.userLoginInfo = info;
+    },
+    get userLoginInfo() 
+    {
+      var info = storage.userLoginInfo;
+      if (angular.isObject(info)) return info;
+      return { username: null, password: null, rememberMe : false };
+    },
+
     logout: function()
     {
       delete storage.oauthToken;
       delete storage.authToken;
       delete storage.authUser;
       $rootScope.$broadcast('userChanged');
-    }
+    },
   };
   return manager;
 }]);
