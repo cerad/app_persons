@@ -11,6 +11,7 @@ class BillWalkerReader extends ExcelReader
   [
     'ussf_id'        => ['cols' => 'USSF ID'],
       
+    'badge'          => ['cols' => 'Grade'],
     'reg_year'       => ['cols' => 'Registration Year'],
     'reg_state'      => ['cols' => 'Registered State'],
     'reg_status'     => ['cols' => 'Registration Status'],
@@ -32,7 +33,7 @@ class BillWalkerReader extends ExcelReader
     'gender'        => ['cols' => 'Gender'],
     'dob'           => ['cols' => 'Date of Birth'],
       
-    'new_grade_attained_date'  => ['cols' => 'NewGrade Attained Date'],
+    'new_grade_attained_date' => ['cols' => 'NewGrade Attained Date'],
     'ref_first_date'          => ['cols' => 'Ref 1st Date'],
     'state_approved_date'     => ['cols' => 'State Approved Date'],
   ];
@@ -41,11 +42,12 @@ class BillWalkerReader extends ExcelReader
     // ussf id has weird char at end, just grab digits
     $item['ussf_id'] = preg_replace('/\D/','',$item['ussf_id']);
     
+    $item['badge'] = 'Grade ' . $item['badge'];
+    
     foreach(['dob','new_grade_attained_date','ref_first_date','state_approved_date'] as $key)
     {
       $item[$key] = $this->processDate($item[$key]);
     }
-    
     $this->items[] = $item;
   }
 }

@@ -16,6 +16,7 @@ CREATE TABLE referees (
   address_state   VARCHAR(10) DEFAULT NULL, 
   address_zipcode VARCHAR(10) DEFAULT NULL, 
 
+  badge      VARCHAR(10) DEFAULT NULL, 
   reg_year   VARCHAR(10) DEFAULT NULL, 
   reg_state  VARCHAR(10) DEFAULT NULL, 
   reg_status VARCHAR(20) DEFAULT NULL, 

@@ -22,14 +22,14 @@ INSERT INTO referees
 ( ussf_id,  
   name_first, name_last, name_middle, email_ussf, phone_home, phone_work, gender, dob,
   address_street, address_city, address_state, address_zipcode,
-  reg_year, reg_state, reg_status, district,
+  badge,reg_year, reg_state, reg_status, district,
   new_grade_attained_date, ref_first_date, state_approved_date
 )
 VALUES 
 (:ussf_id,  
  :name_first,:name_last,:name_middle,:email_ussf,:phone_home,:phone_work,:gender,:dob,
  :address_street,:address_city,:address_state,:address_zipcode,
- :reg_year,:reg_state,:reg_status,:district,
+ :badge,:reg_year,:reg_state,:reg_status,:district,
  :new_grade_attained_date,:ref_first_date,:state_approved_date
 );
 EOT;
@@ -130,10 +130,11 @@ EOT;
       'phone_work'  => null, 
       'gender'      => null, 
       'dob'         => null,
-      'address_street' => null, 
+      'address_street'  => null, 
       'address_city'    => null, 
       'address_state'   => null, 
       'address_zipcode' => null,
+      'badge'      => null,
       'reg_year'   => null, 
       'reg_state'  => null, 
       'reg_status' => null, 
